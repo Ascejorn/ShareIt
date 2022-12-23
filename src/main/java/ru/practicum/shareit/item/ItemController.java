@@ -15,7 +15,7 @@ import java.util.List;
 @Slf4j
 public class ItemController {
 
-    public static final String HEADER_OF_OWNER = "X-Sharer-User-Id";
+    private static final String HEADER_OF_OWNER = "X-Sharer-User-Id";
     private final ItemService itemService;
 
     @PostMapping

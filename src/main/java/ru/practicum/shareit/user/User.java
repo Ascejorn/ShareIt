@@ -6,9 +6,9 @@ import lombok.*;
 @Builder
 public class User {
 
-    Long id;
+    private Long id;
 
-    String name;
+    private String name;
 
-    String email;
+    private String email;
 }
