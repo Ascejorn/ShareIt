@@ -1,65 +1,21 @@
 package ru.practicum.shareit.user;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import ru.practicum.shareit.exception.UserAlreadyExistsException;
+
 import ru.practicum.shareit.user.dto.UserDto;
+import ru.practicum.shareit.user.model.User;
 
 import java.util.Collection;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
-@Service
-@RequiredArgsConstructor
-public class UserService {
-    private final UserStorage userStorage;
+public interface UserService {
+    UserDto create(UserDto userDto);
 
-    public UserDto create(UserDto userDto) {
-        ifEmailExistThrowingException(userDto.getEmail());
-        User user = UserMapper.toUser(userDto);
-        return UserMapper.toUserDto(userStorage.add(user));
-    }
+    UserDto getById(Long userId);
 
-    public UserDto getById(Long userId) {
-        return UserMapper.toUserDto(getByIdWithExceptionCheck(userId));
-    }
+    Collection<UserDto> getAll();
 
-    public Collection<UserDto> getAll() {
-        return userStorage.getAll().stream()
-                .map(UserMapper::toUserDto)
-                .collect(Collectors.toList());
-    }
+    UserDto update(UserDto userDto, Long userId);
 
-    public UserDto update(UserDto userDto, Long userId) {
-        User user = getByIdWithExceptionCheck(userId);
-        if (!user.getEmail().equals(userDto.getEmail())) {
-            ifEmailExistThrowingException(userDto.getEmail());
-        }
-        if (userDto.getName() != null) {
-            user.setName(userDto.getName());
-        }
-        if (userDto.getEmail() != null) {
-            user.setEmail(userDto.getEmail());
-        }
-        userStorage.add(user);
-        return UserMapper.toUserDto(user);
-    }
+    void delete(Long userId);
 
-    public void delete(Long userId) {
-        userStorage.delete(userId);
-    }
-
-    private void ifEmailExistThrowingException(String email) {
-        if (userStorage.isEmailExist(email)) {
-            throw new UserAlreadyExistsException(email);
-        }
-    }
-
-    private User getByIdWithExceptionCheck(Long userId) {
-        Optional<User> user = userStorage.getById(userId);
-        if (user.isEmpty()) {
-            throw new UserAlreadyExistsException("User by id " + userId);
-        }
-        return user.get();
-    }
+    User getByIdOrNotFoundError(Long userId);
 }

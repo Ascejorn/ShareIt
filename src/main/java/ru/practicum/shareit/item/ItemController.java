@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.item.dto.CommentDto;
+import ru.practicum.shareit.item.dto.ItemAdvancedDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 
 import javax.validation.Valid;
@@ -14,50 +16,69 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class ItemController {
-
-    private static final String HEADER_OF_OWNER = "X-Sharer-User-Id";
     private final ItemService itemService;
+    private final CommentService commentService;
+
+    public static final String USER_ID_HEADER = "X-Sharer-User-Id";
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ItemDto create(
+    public ItemDto createItem(
             @Valid @RequestBody ItemDto itemDto,
-            @RequestHeader(HEADER_OF_OWNER) Long userId
+            @RequestHeader(USER_ID_HEADER) Long userId
     ) {
-        log.info("POST /items :: {} :: {}", userId, itemDto);
+        log.info("POST /items {}", itemDto);
         return itemService.create(itemDto, userId);
     }
 
     @PatchMapping("/{itemId}")
-    public ItemDto update(
+    @ResponseStatus(HttpStatus.OK)
+    public ItemDto updateItem(
             @RequestBody ItemDto itemDto,
             @PathVariable Long itemId,
-            @RequestHeader(HEADER_OF_OWNER) Long userId
+            @RequestHeader(USER_ID_HEADER) Long userId
     ) {
-        log.info("PATCH /items/{} :: {} :: {}", itemId, userId, itemDto);
+        log.info("PATCH /items/{} {}", itemId, itemDto);
         return itemService.update(itemId, userId, itemDto);
     }
 
     @GetMapping("/{itemId}")
-    public ItemDto getById(@PathVariable Long itemId) {
+    @ResponseStatus(HttpStatus.OK)
+    public ItemAdvancedDto getItemById(
+            @PathVariable Long itemId,
+            @RequestHeader(USER_ID_HEADER) Long userId
+    ) {
         log.info("GET /items/{}", itemId);
-        return itemService.getById(itemId);
+        return itemService.getById(itemId, userId);
     }
 
     @GetMapping
-    public List<ItemDto> getByOwnerId(
-            @RequestHeader(HEADER_OF_OWNER) Long ownerId
+    @ResponseStatus(HttpStatus.OK)
+    public List<ItemAdvancedDto> getItemsByOwnerId(
+            @RequestHeader(USER_ID_HEADER) Long ownerId
     ) {
         log.info("GET /items");
-        log.info("GET /items :: {}", ownerId);
-        return itemService.getOwnerById(ownerId);
+        return itemService.getAllByOwnerId(ownerId);
     }
 
     @GetMapping("/search")
-    public List<ItemDto> search(
+    @ResponseStatus(HttpStatus.OK)
+    public List<ItemDto> searchItems(
             @RequestParam(name = "text", defaultValue = "") String text
     ) {
-        log.info("GET /items/search :: {}", text);
-        return itemService.getAvailableByNameOrDescription(text);
+        log.info("GET /items/search?text={}", text);
+        return itemService.findAvailableByNameOrDescription(text);
     }
+
+    @PostMapping("/{itemId}/comment")
+    @ResponseStatus(HttpStatus.OK)
+    public CommentDto createComment(
+            @Valid @RequestBody CommentDto commentDto,
+            @PathVariable Long itemId,
+            @RequestHeader(USER_ID_HEADER) Long authorId
+    ) {
+        log.info("POST /items/{}/comment '{}'", itemId, commentDto.getText());
+        return commentService.create(commentDto, itemId, authorId);
+    }
+
 }
