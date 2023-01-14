@@ -1,8 +1,10 @@
 package ru.practicum.shareit.booking.dto;
 
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import ru.practicum.shareit.booking.BookingStatus;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.user.dto.UserDto;
@@ -21,7 +23,25 @@ public class BookingAdvancedDto {
 
     private LocalDateTime end;
 
-    private UserDto booker;
+    private BookingAdvancedDto.User booker;
 
-    private ItemDto item;
+    private BookingAdvancedDto.Item item;
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class User {
+        private Long id;
+        private String name;
+        private String email;
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class Item {
+        private Long id;
+        private String name;
+        private Boolean available;
+    }
 }

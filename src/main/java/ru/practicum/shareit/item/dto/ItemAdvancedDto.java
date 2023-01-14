@@ -1,10 +1,11 @@
 package ru.practicum.shareit.item.dto;
 
 import lombok.*;
-import ru.practicum.shareit.booking.dto.BookingDto;
+import ru.practicum.shareit.booking.BookingStatus;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -25,9 +26,32 @@ public class ItemAdvancedDto {
     @NotNull(message = "Availability is required.")
     private Boolean available;
 
-    private BookingDto lastBooking;
+    private ItemAdvancedDto.Booking lastBooking;
 
-    private BookingDto nextBooking;
+    private ItemAdvancedDto.Booking nextBooking;
 
-    private List<CommentDto> comments;
+    private List<ItemAdvancedDto.Comment> comments;
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class Booking {
+        private Long id;
+        private BookingStatus status;
+        private LocalDateTime start;
+        private LocalDateTime end;
+        private Long itemId;
+        private Long bookerId;
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class Comment {
+        private Long id;
+        private String authorName;
+        private String text;
+        private LocalDateTime created;
+    }
 }
