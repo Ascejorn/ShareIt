@@ -42,10 +42,4 @@ public class ItemRequestMapper {
                         : null)
                 .build();
     }
-
-    public List<ItemRequestDto.Item> toItemDtoList(List<Item> items) {
-        return items.stream()
-                .map(ItemRequestMapper::toInnerItem)
-                .collect(Collectors.toList());
-    }
 }

@@ -12,9 +12,6 @@ import javax.validation.constraints.Positive;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 @Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
 public class ItemAdvancedDto {
 
@@ -39,9 +36,8 @@ public class ItemAdvancedDto {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Long requestId;
 
-    @Data
+    @Getter
     @AllArgsConstructor
-    @NoArgsConstructor
     public static class Booking {
         private Long id;
         private BookingStatus status;
@@ -51,9 +47,8 @@ public class ItemAdvancedDto {
         private Long bookerId;
     }
 
-    @Data
+    @Getter
     @AllArgsConstructor
-    @NoArgsConstructor
     @Builder
     public static class Comment {
         private Long id;

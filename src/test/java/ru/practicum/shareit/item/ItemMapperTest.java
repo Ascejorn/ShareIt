@@ -87,4 +87,30 @@ class ItemMapperTest {
         assertThat(itemDto.getLastBooking()).isNotNull();
         assertThat(itemDto.getNextBooking()).isNotNull();
     }
+
+    @Test
+    void toItemAdvancedDtoWithOutLastBooking() {
+        ItemAdvancedDto itemDto = ItemMapper.toItemAdvancedDto(item, null, nextBooking);
+        assertThat(itemDto).isNotNull();
+        assertThat(itemDto.getId()).isEqualTo(item.getId());
+        assertThat(itemDto.getName()).isEqualTo(item.getName());
+        assertThat(itemDto.getDescription()).isEqualTo(item.getDescription());
+        assertThat(itemDto.getRequestId()).isEqualTo(item.getItemRequest().getId());
+        assertThat(itemDto.getComments()).isNotNull();
+        assertThat(itemDto.getLastBooking()).isEqualTo(null);
+        assertThat(itemDto.getNextBooking()).isNotNull();
+    }
+
+    @Test
+    void toItemAdvancedDtoWithOutNextBooking() {
+        ItemAdvancedDto itemDto = ItemMapper.toItemAdvancedDto(item, lastBooking, null);
+        assertThat(itemDto).isNotNull();
+        assertThat(itemDto.getId()).isEqualTo(item.getId());
+        assertThat(itemDto.getName()).isEqualTo(item.getName());
+        assertThat(itemDto.getDescription()).isEqualTo(item.getDescription());
+        assertThat(itemDto.getRequestId()).isEqualTo(item.getItemRequest().getId());
+        assertThat(itemDto.getComments()).isNotNull();
+        assertThat(itemDto.getLastBooking()).isNotNull();
+        assertThat(itemDto.getNextBooking()).isEqualTo(null);
+    }
 }
