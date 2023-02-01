@@ -31,7 +31,7 @@ public class ItemRequestMapper {
                 .build();
     }
 
-    private static ItemRequestDto.Item toInnerItem(Item item) {
+    protected static ItemRequestDto.Item toInnerItem(Item item) {
         return ItemRequestDto.Item.builder()
                 .id(item.getId())
                 .name(item.getName())

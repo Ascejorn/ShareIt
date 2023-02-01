@@ -27,6 +27,7 @@ public class ItemRequestDto {
 
 
     @Builder
+    @Getter
     public static class Item {
 
         private Long id;
