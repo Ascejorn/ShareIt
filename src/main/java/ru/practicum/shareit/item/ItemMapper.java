@@ -6,6 +6,8 @@ import ru.practicum.shareit.item.dto.ItemAdvancedDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
 
+import java.util.Optional;
+
 @UtilityClass
 public class ItemMapper {
     public static ItemDto toItemDto(Item item) {
@@ -14,10 +16,13 @@ public class ItemMapper {
                 .name(item.getName())
                 .description(item.getDescription())
                 .available(item.getAvailable())
+                .requestId(Optional.ofNullable(item.getItemRequest()).isPresent()
+                        ? item.getItemRequest().getId()
+                        : null)
                 .build();
     }
 
-    public static ItemAdvancedDto toItemBookingDto(
+    public static ItemAdvancedDto toItemAdvancedDto(
             Item item, BookingDto lastBooking, BookingDto nextBooking
     ) {
         if (lastBooking == null && nextBooking == null) {
@@ -29,6 +34,9 @@ public class ItemMapper {
                     .lastBooking(null)
                     .nextBooking(null)
                     .comments(CommentMapper.toCommentDtoList(item.getComments()))
+                    .requestId(Optional.ofNullable(item.getItemRequest()).isPresent()
+                            ? item.getItemRequest().getId()
+                            : null)
                     .build();
 
         } else if (lastBooking == null) {
@@ -45,6 +53,9 @@ public class ItemMapper {
                             nextBooking.getItemId(),
                             nextBooking.getBookerId()))
                     .comments(CommentMapper.toCommentDtoList(item.getComments()))
+                    .requestId(Optional.ofNullable(item.getItemRequest()).isPresent()
+                            ? item.getItemRequest().getId()
+                            : null)
                     .build();
 
         } else if (nextBooking == null) {
@@ -61,6 +72,9 @@ public class ItemMapper {
                             lastBooking.getBookerId()))
                     .nextBooking(null)
                     .comments(CommentMapper.toCommentDtoList(item.getComments()))
+                    .requestId(Optional.ofNullable(item.getItemRequest()).isPresent()
+                            ? item.getItemRequest().getId()
+                            : null)
                     .build();
 
         } else {
@@ -82,6 +96,9 @@ public class ItemMapper {
                             nextBooking.getItemId(),
                             nextBooking.getBookerId()))
                     .comments(CommentMapper.toCommentDtoList(item.getComments()))
+                    .requestId(Optional.ofNullable(item.getItemRequest()).isPresent()
+                            ? item.getItemRequest().getId()
+                            : null)
                     .build();
         }
     }

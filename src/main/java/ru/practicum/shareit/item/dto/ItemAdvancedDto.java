@@ -7,6 +7,9 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
+import javax.validation.constraints.Positive;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 @Getter
 @Setter
@@ -31,6 +34,10 @@ public class ItemAdvancedDto {
     private ItemAdvancedDto.Booking nextBooking;
 
     private List<ItemAdvancedDto.Comment> comments;
+
+    @Positive(message = "Request should be positive.")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private Long requestId;
 
     @Data
     @AllArgsConstructor
