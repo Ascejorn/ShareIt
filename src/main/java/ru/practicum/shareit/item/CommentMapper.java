@@ -36,7 +36,7 @@ public class CommentMapper {
                 .build();
     }
 
-    private static ItemAdvancedDto.Comment toInnerComment(Comment comment) {
+    protected static ItemAdvancedDto.Comment toInnerComment(Comment comment) {
         return ItemAdvancedDto.Comment.builder()
                 .id(comment.getId())
                 .authorName(comment.getAuthor().getName())

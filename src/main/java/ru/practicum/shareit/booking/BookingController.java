@@ -55,19 +55,23 @@ public class BookingController {
     @ResponseStatus(HttpStatus.OK)
     public List<BookingAdvancedDto> getBookingsByStateOfBooker(
             @RequestHeader(USER_ID_HEADER) Long bookerId,
-            @RequestParam(required = false, defaultValue = DEFAULT_STATE) String state
+            @RequestParam(name = "state", required = false, defaultValue = DEFAULT_STATE) String state,
+            @RequestParam(name = "from", defaultValue = "0") int from,
+            @RequestParam(name = "size", defaultValue = "20") int size
     ) {
-        log.info("GET /bookings?state={}", state);
-        return bookingService.getAllOfBookerByState(bookerId, state);
+        log.info("GET /bookings?state={}&from{}&size{}", state, from, size);
+        return bookingService.getAllOfBookerByState(from, size, bookerId, state);
     }
 
     @GetMapping("/owner")
     @ResponseStatus(HttpStatus.OK)
     public List<BookingAdvancedDto> getBookingsByStateOfOwner(
             @RequestHeader(USER_ID_HEADER) Long ownerId,
-            @RequestParam(required = false, defaultValue = DEFAULT_STATE) String state
+            @RequestParam(name = "state", required = false, defaultValue = DEFAULT_STATE) String state,
+            @RequestParam(name = "from", defaultValue = "0") int from,
+            @RequestParam(name = "size", defaultValue = "20") int size
     ) {
-        log.info("GET /bookings/owner?state={}", state);
-        return bookingService.getAllOfOwnerByState(ownerId, state);
+        log.info("GET /bookings/owner?state={}&from{}&size{}", state, from, size);
+        return bookingService.getAllOfOwnerByState(from, size, ownerId, state);
     }
 }

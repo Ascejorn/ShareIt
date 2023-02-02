@@ -5,16 +5,19 @@ import org.springframework.stereotype.Service;
 import ru.practicum.shareit.validation.exception.NotFoundException;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.model.User;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Override
+    @Transactional
     public UserDto create(UserDto userDto) {
         User user = UserMapper.toUser(userDto);
         return UserMapper.toUserDto(userRepository.save(user));
@@ -33,6 +36,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public UserDto update(UserDto userDto, Long userId) {
         User user = getByIdOrNotFoundError(userId);
         if (userDto.getName() != null) {
@@ -46,6 +50,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void delete(Long userId) {
         userRepository.delete(getByIdOrNotFoundError(userId));
     }

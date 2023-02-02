@@ -30,9 +30,9 @@ public class BookingMapper {
                 .end(booking.getEnd())
                 .status(booking.getStatus())
                 .item(new BookingAdvancedDto.Item(booking.getItem().getId(),
-                        booking.getItem().getName(),booking.getItem().getAvailable()))
+                        booking.getItem().getName(), booking.getItem().getAvailable()))
                 .booker(new BookingAdvancedDto.User(booking.getBooker().getId(),
-                        booking.getBooker().getName(),booking.getBooker().getEmail()))
+                        booking.getBooker().getName(), booking.getBooker().getEmail()))
                 .build();
     }
 

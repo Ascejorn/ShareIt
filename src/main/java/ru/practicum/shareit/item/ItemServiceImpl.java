@@ -2,14 +2,18 @@ package ru.practicum.shareit.item;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Pageable;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.BookingService;
 import ru.practicum.shareit.booking.dto.BookingDto;
+import ru.practicum.shareit.request.ItemRequestService;
 import ru.practicum.shareit.validation.exception.ForbiddenException;
 import ru.practicum.shareit.validation.exception.NotFoundException;
 import ru.practicum.shareit.item.dto.ItemAdvancedDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.UserService;
+import ru.practicum.shareit.util.FromSizeRequest;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -19,19 +23,26 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
     private final UserService userService;
     private final BookingService bookingService;
+    private final ItemRequestService itemRequestService;
 
     @Override
+    @Transactional
     public ItemDto create(ItemDto itemDto, Long userId) {
         Item item = ItemMapper.toItem(itemDto);
         item.setOwner(userService.getByIdOrNotFoundError(userId));
+        Optional.ofNullable(itemDto.getRequestId()).ifPresent(
+                i -> item.setItemRequest(itemRequestService.getByIdOrNotFoundError(i))
+        );
         return ItemMapper.toItemDto(itemRepository.save(item));
     }
 
     @Override
+    @Transactional
     public ItemDto update(Long itemId, Long userId, ItemDto itemDto) {
         Item item = getByIdOrNotFoundError(itemId);
         if (!item.getOwner().getId().equals(userId)) {
@@ -64,14 +75,15 @@ public class ItemServiceImpl implements ItemService {
         boolean isBooker = bookingService.isBookerOfItem(userId, itemId);
         BookingDto lastBooking = (!isBooker) ? bookingService.getLast(item.getId(), now) : null;
         BookingDto nextBooking = (!isBooker) ? bookingService.getNext(item.getId(), now) : null;
-        return ItemMapper.toItemBookingDto(item, lastBooking, nextBooking);
+        return ItemMapper.toItemAdvancedDto(item, lastBooking, nextBooking);
     }
 
     @Override
-    public List<ItemAdvancedDto> getAllByOwnerId(Long ownerId) {
+    public List<ItemAdvancedDto> getAllByOwnerId(int from, int size, Long ownerId) {
+        Pageable pageable = FromSizeRequest.of(from, size);
         LocalDateTime now = LocalDateTime.now();
-        return itemRepository.findByOwner_IdOrderByIdAsc(ownerId).stream()
-                .map(i -> ItemMapper.toItemBookingDto(
+        return itemRepository.findByOwner_IdOrderByIdAsc(ownerId, pageable).stream()
+                .map(i -> ItemMapper.toItemAdvancedDto(
                         i,
                         bookingService.getLast(i.getId(), now),
                         bookingService.getNext(i.getId(), now)
@@ -80,8 +92,11 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<ItemDto> findAvailableByNameOrDescription(String text) {
-        return (text.isBlank()) ? new ArrayList<>() : itemRepository.findAvailableByNameOrDescription(text).stream()
+    public List<ItemDto> findAvailableByNameOrDescription(int from, int size, String text) {
+        Pageable pageable = FromSizeRequest.of(from, size);
+        return (text.isBlank())
+                ? new ArrayList<>()
+                : itemRepository.findAvailableByNameOrDescription(text, pageable).stream()
                 .map(ItemMapper::toItemDto)
                 .collect(Collectors.toList());
     }

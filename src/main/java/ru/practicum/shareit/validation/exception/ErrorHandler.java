@@ -80,6 +80,6 @@ public class ErrorHandler {
     @ExceptionHandler(Throwable.class)
     public ErrorResponse handleServerErrorException(Throwable ex) {
         log.info("Server error: {}, {}", ex.getClass(), ex.getMessage());
-        return new ErrorResponse("internal server error.");
+        return new ErrorResponse("Internal server error.");
     }
 }

@@ -6,11 +6,8 @@ import lombok.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
-@Setter
+
 @Getter
-@AllArgsConstructor
-@EqualsAndHashCode
-@ToString
 @Builder
 public class CommentDto {
 

@@ -2,6 +2,7 @@ package ru.practicum.shareit.item.model;
 
 import lombok.*;
 import ru.practicum.shareit.user.model.User;
+import ru.practicum.shareit.request.ItemRequest;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ public class Item {
     @Column(name = "available", nullable = false)
     private Boolean available;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "owner_id", referencedColumnName = "id")
     private User owner;
 
@@ -40,6 +41,10 @@ public class Item {
             orphanRemoval = true
     )
     private List<Comment> comments = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "request_id", referencedColumnName = "id")
+    private ItemRequest itemRequest;
 
     public void addComment(Comment comment) {
         comments.add(comment);
