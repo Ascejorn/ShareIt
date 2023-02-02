@@ -17,12 +17,12 @@ import java.util.ArrayList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ItemMapperTest {
-    Item item;
-    User owner;
-    ItemRequest request;
-    User requester;
-    BookingDto lastBooking;
-    BookingDto nextBooking;
+    private Item item;
+    private User owner;
+    private ItemRequest request;
+    private User requester;
+    private BookingDto lastBooking;
+    private BookingDto nextBooking;
 
     @BeforeEach
     void setUp() {

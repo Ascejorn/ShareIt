@@ -14,13 +14,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class ItemRequestMapperTest {
 
-    Item item;
+    private Item item;
 
-    User owner;
+    private User owner;
 
-    ItemRequest request;
+    private ItemRequest request;
 
-    User requester;
+    private User requester;
 
     @BeforeEach
     void setUp() {

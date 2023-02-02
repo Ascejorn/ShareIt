@@ -15,17 +15,17 @@ import java.util.ArrayList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class CommentMapperTest {
-    Item item;
+    private Item item;
 
-    User owner;
+    private User owner;
 
-    User author;
+    private User author;
 
-    ItemRequest request;
+    private ItemRequest request;
 
-    User requester;
+    private User requester;
 
-    Comment comment;
+    private Comment comment;
 
     @BeforeEach
     void setUp() {

@@ -36,11 +36,11 @@ class BookingServiceTest {
 
     private Long id;
     private Map<Long, Object> longObjectMap;
-    UserDto owner;
-    UserDto booker;
-    ItemDto item;
-    LocalDateTime start;
-    LocalDateTime end;
+    private UserDto owner;
+    private UserDto booker;
+    private ItemDto item;
+    private LocalDateTime start;
+    private LocalDateTime end;
 
     @BeforeEach
     void setUp() {

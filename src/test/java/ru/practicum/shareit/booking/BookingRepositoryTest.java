@@ -22,12 +22,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DataJpaTest
 @AutoConfigureTestDatabase
 class BookingRepositoryTest {
-    BookingRepository bookingRepository;
-    UserRepository userRepository;
-    ItemRepository itemRepository;
-    User booker;
-    User owner;
-    Item item;
+    private BookingRepository bookingRepository;
+    private UserRepository userRepository;
+    private ItemRepository itemRepository;
+    private User booker;
+    private User owner;
+    private Item item;
 
     @Autowired
     public BookingRepositoryTest(
